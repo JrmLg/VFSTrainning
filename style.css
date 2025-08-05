@@ -1,0 +1,151 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+}
+
+img {
+  max-width: 200px;
+  margin: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.option-img {
+  max-width: 120px;
+  margin: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.option-img:hover {
+  border: 2px solid #333;
+}
+
+#feedbackHistory {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.feedback-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+  position: relative;
+  cursor: default;
+}
+
+.feedback-dot:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 10;
+}
+.feedback-correct {
+  background-color: #4caf50; /* vert */
+}
+
+.feedback-wrong {
+  background-color: #f44336; /* rouge */
+}
+
+.control-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.control-button {
+  background: #eee;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.control-button:hover {
+  background: #ddd;
+  border-color: #999;
+}
+
+.control-button.green {
+  background-color: #c8e6c9;
+  border-color: #81c784;
+}
+
+.control-button.red {
+  background-color: #ffcdd2;
+  border-color: #e57373;
+}
+
+#statusContainer {
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
+  text-align: center;
+}
+
+#gameStatus {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+#progressBarContainer {
+  background-color: #ddd;
+  border-radius: 10px;
+  height: 20px;
+  width: 100%;
+  overflow: hidden;
+}
+
+#progressBar {
+  background-color: #4caf50;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease-in-out;
+}
+
+#progressText {
+  margin-top: 4px;
+  font-size: 14px;
+}

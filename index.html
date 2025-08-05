@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soufflerie Trainer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>VFS Trainning</h1>
+      <div id="menu">
+        <button onclick="startSelection('points')">Réviser les points</button>
+        <button onclick="startSelection('blocs')">Réviser les blocs</button>
+      </div>
+
+      <div id="statusContainer" class="hidden">
+        <div id="gameStatus">Phase :</div>
+        <div id="progressBarContainer">
+          <div id="progressBar"></div>
+        </div>
+        <div id="progressText">0%</div>
+      </div>
+      <div id="selection" class="hidden"></div>
+      <div id="feedbackHistory" class="hidden"></div>
+      <div id="exercise" class="hidden"></div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
