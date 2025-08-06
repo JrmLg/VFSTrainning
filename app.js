@@ -123,6 +123,7 @@ function startLearningPhase() {
 
     const f = selectedFigures[i]
     container.innerHTML = `
+      <br>
       <div class="exercise-header">
         <h2>${f.id} - ${f.name}</h2>
       </div>
@@ -286,9 +287,14 @@ function checkAnswer(chosenId) {
     currentFigure.score++
   } else {
     currentFigure.score = 0
-  }
 
-  // Ajouter au tableau d’historique
+    const wrongFigure = selectedFigures.find((f) => f.id === chosenId)
+    if (wrongFigure && wrongFigure.id !== currentFigure.id) {
+      wrongFigure.score = Math.max(0, wrongFigure.score - 1)
+    }
+  }
+  updateProgress(currentPhase)
+
   feedbackHistory.push({
     result: correct ? 'correct' : 'wrong',
     number: feedbackHistory.length + 1,
@@ -333,7 +339,16 @@ function updateProgress(statusLabel) {
 
   statusDiv.classList.remove('hidden')
 
-  const percent = Math.round((currentStep / totalSteps) * 100)
+  let percent = 0
+
+  if (currentPhase === 'Apprentissage') {
+    percent = Math.round((currentStep / totalSteps) * 100)
+  } else if (currentPhase === 'Entraînement') {
+    const currentTotal = selectedFigures.reduce((sum, f) => sum + Math.min(f.score, 3), 0)
+    const maxTotal = selectedFigures.length * 3
+    percent = Math.round((currentTotal / maxTotal) * 100)
+  }
+
   progressBar.style.width = percent + '%'
   progressLabel.textContent = `Phase : ${statusLabel} - ${percent}%`
 }
