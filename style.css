@@ -3,7 +3,7 @@
 }
 
 html {
-  height: 100vh;
+  height: 100dvh;
   margin: 0;
   padding: 0;
 }
@@ -13,7 +13,7 @@ body {
   background: #f0f0f0;
   text-align: center;
   margin: 0;
-  height: 100vh;
+  height: 100dvh;
 }
 
 h2 {
@@ -24,7 +24,7 @@ h2 {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   max-width: 600px;
   margin: auto;
   background: white;
