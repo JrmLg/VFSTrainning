@@ -7,6 +7,8 @@ const MAX_FEEDBACK = 10
 let currentStep = 0
 let totalSteps = 0
 let currentPhase = ''
+let lastQuestionType = null
+let lastFigureId = null
 
 function startSelection(type) {
   dataType = type
@@ -185,19 +187,16 @@ function startQuizPhase() {
 }
 
 function askQuestion() {
-  // Vérifie si toutes les figures ont un score >= 3
   const allLearned = selectedFigures.every((f) => f.score >= 3)
 
   if (allLearned) {
     document.getElementById('exercise').innerHTML = `<h2>Bravo, entraînement terminé 🎉</h2>`
-    // Cacher la barre de progression
     document.getElementById('statusContainer').classList.add('hidden')
 
     setTimeout(() => {
       document.getElementById('exercise').classList.add('hidden')
       document.getElementById('menu').classList.remove('hidden')
 
-      // Réinitialiser progression et variables
       currentStep = 0
       totalSteps = 0
       currentPhase = ''
@@ -207,16 +206,21 @@ function askQuestion() {
     return
   }
 
-  // Génère les candidats
-  const candidates = selectedFigures.flatMap((f) => {
-    if (f.score < 3) return Array(3).fill(f) // figures non maîtrisées plus fréquentes
-    if (Math.random() < 0.1) return [f] // 10% chance de revoir une figure maîtrisée
+  let candidates = selectedFigures.flatMap((f) => {
+    if (f.score < 3) return Array(3).fill(f)
+    if (Math.random() < 0.1) return [f]
     return []
   })
 
-  // Prendre une figure au hasard
+  const uniqueCandidates = [...new Set(candidates.map((f) => f.id))]
+  if (uniqueCandidates.length > 1) {
+    candidates = candidates.filter((f) => f.id !== lastFigureId)
+  }
+
   const shuffledCandidates = shuffleArray(candidates)
   currentFigure = shuffledCandidates[Math.floor(Math.random() * shuffledCandidates.length)]
+
+  lastFigureId = currentFigure.id
 
   const questionType = pickQuestionType()
   const html = renderQuestion(currentFigure, questionType)
@@ -229,7 +233,10 @@ function askQuestion() {
 
 function pickQuestionType() {
   const types = ['img-to-name', 'name-to-img', 'id-to-name', 'name-to-id']
-  return types[Math.floor(Math.random() * types.length)]
+  const filtered = types.filter((t) => t !== lastQuestionType)
+  const nextType = filtered[Math.floor(Math.random() * filtered.length)]
+  lastQuestionType = nextType
+  return nextType
 }
 
 function renderQuestion(figure, type) {
