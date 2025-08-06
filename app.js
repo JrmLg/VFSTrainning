@@ -34,7 +34,7 @@ function showSelectionScreen() {
     .join('')
 
   container.innerHTML = `
-    <h2>Sélectionne les ${dataType}</h2>
+    <h2>Sélectionne les ${dataType}s</h2>
 
     <div class="control-buttons">
       <button type="button" class="control-button toggle-check green" onclick="toggleCheckboxes(true)">
@@ -49,7 +49,7 @@ function showSelectionScreen() {
       <p>Choix aléatoire :</p>
       <div class="control-buttons">
         ${[4, 5, 6, 7, 8, 9, 10]
-          .map((n) => `<button type="button" class="control-button" onclick="selectRandomFigures(${n})">${n}</button>`)
+          .map((n) => `<button type="button" class="control-button checkbox-button" onclick="selectRandomFigures(${n})">${n}</button>`)
           .join('')}
       </div>
     </div>
@@ -58,9 +58,23 @@ function showSelectionScreen() {
       <div id="figuresList">
         ${listHTML}
       </div>
-      <button type="submit">Commencer</button>
+      <button type="submit" id="startButton" disabled>Commencer</button>
     </form>
   `
+  const checkboxes = document.querySelectorAll('.figure-checkbox')
+  const checkboxButtons = document.querySelectorAll('.checkbox-button')
+  const startButton = document.getElementById('startButton')
+  const toggleCheckers = document.querySelectorAll('.toggle-check')
+
+  function updateStartButtonState() {
+    const anyChecked = [...checkboxes].some((cb) => cb.checked)
+    startButton.disabled = !anyChecked
+  }
+
+  checkboxButtons.forEach((btn) => btn.addEventListener('click', updateStartButtonState))
+  toggleCheckers.forEach((btn) => btn.addEventListener('click', updateStartButtonState))
+  checkboxes.forEach((cb) => cb.addEventListener('change', updateStartButtonState))
+  updateStartButtonState()
 
   document.getElementById('selectionForm').onsubmit = (e) => {
     e.preventDefault()
