@@ -15,6 +15,11 @@ function startSelection(type) {
     .then((res) => res.json())
     .then((data) => {
       allFigures = data.map((f) => ({ ...f, score: 0 }))
+
+      allFigures.forEach((f) => {
+        const img = new Image()
+        img.src = f.image
+      })
       showSelectionScreen()
     })
 }
