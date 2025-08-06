@@ -258,6 +258,7 @@ function renderQuestion(figure, type) {
       `
     case 'name-to-id':
       return `
+        <br>
         <h2>Quelle est ${dataType == 'bloc' ? 'le numéro' : 'la lettre'} de : ${figure.name} ?</h2>
         <div class="standard-options">
           ${renderOptions(shuffled, 'id')}
