@@ -8,19 +8,23 @@
   </head>
   <body>
     <div class="container">
-      <h1>VFS Trainning</h1>
+      <div id="header">
+        <img src="assets/logo.png" alt="VFS Logo" id="logo" />
+        <h1>VFS Trainning</h1>
+        <img src="assets/logo.png" alt="VFS Logo" id="logo" />
+      </div>
       <div id="menu">
-        <button onclick="startSelection('points')">Réviser les points</button>
-        <button onclick="startSelection('blocs')">Réviser les blocs</button>
+        <button onclick="startSelection('point')">Réviser les points</button>
+        <button onclick="startSelection('bloc')">Réviser les blocs</button>
       </div>
 
       <div id="statusContainer" class="hidden">
-        <div id="gameStatus">Phase :</div>
         <div id="progressBarContainer">
           <div id="progressBar"></div>
+          <span id="progressLabel">Phase : Apprentissage - 0%</span>
         </div>
-        <div id="progressText">0%</div>
       </div>
+
       <div id="selection" class="hidden"></div>
       <div id="feedbackHistory" class="hidden"></div>
       <div id="exercise" class="hidden"></div>

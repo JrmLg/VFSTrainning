@@ -11,7 +11,7 @@ let currentPhase = ''
 function startSelection(type) {
   dataType = type
   document.getElementById('menu').classList.add('hidden')
-  fetch(`${type}.json`)
+  fetch(`${type}s.json`)
     .then((res) => res.json())
     .then((data) => {
       allFigures = data.map((f) => ({ ...f, score: 0 }))
@@ -26,10 +26,10 @@ function showSelectionScreen() {
   const listHTML = allFigures
     .map(
       (f) =>
-        `<label>
-      <input type="checkbox" class="figure-checkbox" name="figures" value="${f.id}" checked />
+        `<label class="figure-item">
+      <input type="checkbox" class="figure-checkbox" name="figures" value="${f.id}"  />
       ${f.id} - ${f.name}
-    </label><br>`,
+    </label>`,
     )
     .join('')
 
@@ -37,8 +37,12 @@ function showSelectionScreen() {
     <h2>Sélectionne les ${dataType}</h2>
 
     <div class="control-buttons">
-      <button type="button" class="control-button green" onclick="toggleCheckboxes(true)">🟩</button>
-      <button type="button" class="control-button red" onclick="toggleCheckboxes(false)">🟥</button>
+      <button type="button" class="control-button toggle-check green" onclick="toggleCheckboxes(true)">
+        Tout sélectionner
+      </button>
+      <button type="button" class="control-button toggle-check red" onclick="toggleCheckboxes(false)">
+        Tout désélectionner
+      </button>
     </div>
 
     <div style="text-align: center; margin-bottom: 10px;">
@@ -105,11 +109,19 @@ function startLearningPhase() {
 
     const f = selectedFigures[i]
     container.innerHTML = `
-      <h2>${f.id} - ${f.name}</h2>
-      <img src="${f.image}" alt="${f.name}" />
-      <br>
-      <button onclick="next()">Suivant</button>
-      <button onclick="skipLearning()" style="margin-left:10px;">Passer l'apprentissage</button>
+      <div class="exercise-header">
+        <h2>${f.id} - ${f.name}</h2>
+      </div>
+
+      <div class="exercise-image">
+        <img src="${f.image}" alt="${f.name}" />
+      </div>
+
+
+      <div class="exercise-options">
+        <button onclick="skipLearning()" style="margin-left:10px;">Passer l'apprentissage</button>
+        <button onclick="next()">Suivant</button>
+      </div>
     `
 
     function next() {
@@ -130,7 +142,6 @@ function skipLearning() {
 }
 
 function quitTraining() {
-  // Réinitialiser variables
   currentStep = 0
   totalSteps = 0
   currentPhase = ''
@@ -191,7 +202,7 @@ function askQuestion() {
   const html = renderQuestion(currentFigure, questionType)
   document.getElementById('exercise').innerHTML = `
   ${html}
-  <br><button onclick="quitTraining()" style="margin-top:10px; background:#f44336; color:white;">Quitter l'entraînement</button>
+  <button onclick="quitTraining()" style="margin-top:10px; background:#f44336; color:white;">Quitter l'entraînement</button>
 `
   updateProgress(currentPhase)
 }
@@ -208,24 +219,35 @@ function renderQuestion(figure, type) {
   switch (type) {
     case 'img-to-name':
       return `
-        <h2>Quel est le nom de cette figure ?</h2>
-        <img src="${figure.image}" alt="question" />
-        <br>${renderOptions(shuffled, 'name')}
+        <h2>Quel est le nom de ce ${dataType} ?</h2>
+        <div class="exercise-image">
+          <img src="${figure.image}" alt="question" />
+        </div>
+        <div class="compact-options">
+          ${renderOptions(shuffled, 'name')}
+        </div>
       `
     case 'name-to-img':
       return `
         <h2>Quelle est l'image de : ${figure.name} ?</h2>
-        ${renderOptions(shuffled, 'image')}
+        <div class="exercise-image-options ${dataType}">
+          ${renderOptions(shuffled, 'image')}
+        </div>
       `
     case 'id-to-name':
       return `
-        <h2>Quel est le nom de la figure ${figure.id} ?</h2>
-        ${renderOptions(shuffled, 'name')}
+        <br>
+        <h2>Quel est le nom du ${dataType} ${figure.id} ?</h2>
+        <div class="standard-options">
+          ${renderOptions(shuffled, 'name')}
+        </div>
       `
     case 'name-to-id':
       return `
-        <h2>Quelle est la lettre ou le numéro de : ${figure.name} ?</h2>
-        ${renderOptions(shuffled, 'id')}
+        <h2>Quelle est ${dataType == 'bloc' ? 'le numéro' : 'la lettre'} de : ${figure.name} ?</h2>
+        <div class="standard-options">
+          ${renderOptions(shuffled, 'id')}
+        </div>
       `
   }
 }
@@ -291,23 +313,12 @@ function shuffleArray(arr) {
 
 function updateProgress(statusLabel) {
   const statusDiv = document.getElementById('statusContainer')
-  const gameStatus = document.getElementById('gameStatus')
   const progressBar = document.getElementById('progressBar')
-  const progressText = document.getElementById('progressText')
+  const progressLabel = document.getElementById('progressLabel')
 
   statusDiv.classList.remove('hidden')
-  gameStatus.textContent = `Phase : ${statusLabel}`
 
-  let percent = 0
-
-  if (statusLabel === 'Apprentissage') {
-    percent = Math.round((currentStep / totalSteps) * 100)
-  } else if (statusLabel === 'Entraînement') {
-    const totalScore = selectedFigures.reduce((sum, f) => sum + Math.min(f.score, 3), 0)
-    const maxScore = selectedFigures.length * 3
-    percent = Math.round((totalScore / maxScore) * 100)
-  }
-
+  const percent = Math.round((currentStep / totalSteps) * 100)
   progressBar.style.width = percent + '%'
-  progressText.textContent = `${percent}%`
+  progressLabel.textContent = `Phase : ${statusLabel} - ${percent}%`
 }

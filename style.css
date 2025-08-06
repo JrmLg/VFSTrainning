@@ -1,17 +1,102 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: #f0f0f0;
   text-align: center;
   margin: 0;
-  padding: 20px;
+  height: 100%;
+}
+
+h2 {
+  font-size: 17px;
+  margin: 10px 0;
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   max-width: 600px;
   margin: auto;
   background: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.container > * {
+  flex-shrink: 0;
+}
+
+#exercise {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+}
+
+.exercise-header,
+.exercise-options {
+  flex-shrink: 0;
+}
+
+.exercise-image {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.exercise-image img {
+  max-height: 100%;
+  max-width: 60%;
+  object-fit: contain;
+  display: block;
+}
+
+.compact-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.standard-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.exercise-image-options {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.exercise-image-options.point {
+  align-content: center;
+}
+
+.exercise-image-options img {
+  flex: 0 1 calc(50% - 10px);
+  margin: 0;
+  max-height: calc(50% - 10px);
+  object-fit: contain;
 }
 
 button {
@@ -25,7 +110,8 @@ img {
   margin: 10px;
 }
 
-.hidden {
+.hidden,
+#exercise.hidden {
   display: none;
 }
 
@@ -36,8 +122,24 @@ img {
   border: 2px solid transparent;
 }
 
-.option-img:hover {
-  border: 2px solid #333;
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  border-radius: 10px 10px 0 0;
+}
+
+#header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+#header h1 {
+  font-size: 25px;
+  margin: 0;
 }
 
 #feedbackHistory {
@@ -45,7 +147,6 @@ img {
   justify-content: center;
   flex-wrap: wrap;
   gap: 5px;
-  margin-bottom: 20px;
 }
 
 .feedback-dot {
@@ -76,6 +177,7 @@ img {
   white-space: nowrap;
   z-index: 10;
 }
+
 .feedback-correct {
   background-color: #4caf50; /* vert */
 }
@@ -86,10 +188,21 @@ img {
 
 .control-buttons {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 10px;
+}
+
+button {
+  background: #eee;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .control-button {
@@ -97,6 +210,7 @@ img {
   border: 2px solid #ccc;
   border-radius: 8px;
   padding: 8px 12px;
+  margin: 0;
   font-size: 16px;
   cursor: pointer;
   transition: 0.2s;
@@ -124,16 +238,11 @@ img {
   text-align: center;
 }
 
-#gameStatus {
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-
 #progressBarContainer {
+  position: relative;
   background-color: #ddd;
   border-radius: 10px;
-  height: 20px;
+  height: 24px;
   width: 100%;
   overflow: hidden;
 }
@@ -143,9 +252,44 @@ img {
   height: 100%;
   width: 0%;
   transition: width 0.3s ease-in-out;
+  border-radius: 10px;
 }
 
-#progressText {
-  margin-top: 4px;
+#progressLabel {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap;
   font-size: 14px;
+  pointer-events: none; /* pour éviter qu’il bloque des clics */
+}
+
+#figuresList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+  column-gap: 10px;
+  margin-top: 10px;
+}
+
+.figure-item {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.figure-item:hover {
+  background-color: #e6f7ff;
+  border-color: #66afe9;
+  cursor: pointer;
 }
